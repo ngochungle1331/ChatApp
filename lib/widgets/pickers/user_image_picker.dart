@@ -4,40 +4,49 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserImagePicker extends StatefulWidget {
-  final Function(File pickedImage) imagePickFn;
-
   UserImagePicker(this.imagePickFn);
 
+  final void Function(File pickedImage) imagePickFn;
+
   @override
-  State<UserImagePicker> createState() => _UserImagePickerState();
+  _UserImagePickerState createState() => _UserImagePickerState();
 }
 
 class _UserImagePickerState extends State<UserImagePicker> {
-  File? _pickedImage;
+  XFile? _pickedImage;
 
   void _pickImage() async {
+    // final pickedImageFile = await ImagePicker.pickImage(
+    //   source: ImageSource.camera,
+    //   imageQuality: 50,
+    //   maxWidth: 150,
+    // );
     final picker = ImagePicker();
-    final pickedImage = await picker.getImage(
-        source: ImageSource.camera, imageQuality: 50, maxWidth: 150);
+    final pickedImage = await picker.pickImage(source: ImageSource.camera);
     final pickedImageFile = File(pickedImage!.path);
     setState(() {
-      _pickedImage = pickedImageFile;
+      _pickedImage = pickedImageFile as XFile;
     });
-    widget.imagePickFn(_pickedImage as File);
+    widget.imagePickFn(pickedImageFile);
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        const CircleAvatar(
-          radius: 30,
+      children: <Widget>[
+        CircleAvatar(
+          radius: 40,
           backgroundColor: Colors.grey,
+          backgroundImage:
+              _pickedImage != null ? FileImage(_pickedImage as File) : null,
         ),
         TextButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.image),
-            label: const Text('Add image')),
+          style: TextButton.styleFrom(
+              foregroundColor: Theme.of(context).primaryColor),
+          onPressed: _pickImage,
+          icon: const Icon(Icons.image),
+          label: const Text('Add Image'),
+        ),
       ],
     );
   }

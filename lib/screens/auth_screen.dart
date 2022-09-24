@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import '../widgets/auth/auth_form.dart';
+import 'package:module14/widgets/auth/auth_form.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -77,6 +77,7 @@ class _AuthScreenState extends State<AuthScreen> {
         _isLoading = false;
       });
     } catch (err) {
+      print(err);
       setState(() {
         _isLoading = false;
       });

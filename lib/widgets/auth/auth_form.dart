@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+
 import 'package:module14/widgets/pickers/user_image_picker.dart';
 
 class AuthForm extends StatefulWidget {
@@ -40,17 +41,25 @@ class _AuthFormState extends State<AuthForm> {
     FocusScope.of(context).unfocus();
 
     if (_userImageFile == null && !_isLogin) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text('Please pick an image.'),
-        backgroundColor: Theme.of(context).errorColor,
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Please pick an image.'),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
       return;
     }
 
     if (isValid) {
       _formKey.currentState!.save();
-      widget.submitFn(_userEmail.trim(), _userPassword.trim(), _userName.trim(),
-          _userImageFile as File, _isLogin, context);
+      widget.submitFn(
+        _userEmail.trim(),
+        _userPassword.trim(),
+        _userName.trim(),
+        _userImageFile as File,
+        _isLogin,
+        context,
+      );
     }
   }
 
@@ -67,9 +76,12 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  UserImagePicker(_pickedImage),
+                  if (!_isLogin) UserImagePicker(_pickedImage),
                   TextFormField(
                     key: const ValueKey('email'),
+                    autocorrect: false,
+                    textCapitalization: TextCapitalization.none,
+                    enableSuggestions: false,
                     validator: (value) {
                       if (value!.isEmpty || !value.contains('@')) {
                         return 'Please enter a valid email address.';
@@ -87,6 +99,9 @@ class _AuthFormState extends State<AuthForm> {
                   if (!_isLogin)
                     TextFormField(
                       key: const ValueKey('username'),
+                      autocorrect: true,
+                      textCapitalization: TextCapitalization.words,
+                      enableSuggestions: false,
                       validator: (value) {
                         if (value!.isEmpty || value.length < 4) {
                           return 'Please enter at least 4 characters';
@@ -121,6 +136,8 @@ class _AuthFormState extends State<AuthForm> {
                     ),
                   if (!widget.isLoading)
                     TextButton(
+                      style: TextButton.styleFrom(
+                          foregroundColor: Theme.of(context).primaryColor),
                       child: Text(_isLogin
                           ? 'Create new account'
                           : 'I already have an account'),

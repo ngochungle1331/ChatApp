@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 
 class MessageBubble extends StatelessWidget {
+  MessageBubble(
+    this.message,
+    this.userName,
+    this.userImage,
+    this.isMe, {
+    required this.key,
+  });
+
   final Key key;
-  final String messagge;
+  final String message;
   final String userName;
   final String userImage;
   final bool isMe;
-
-  MessageBubble(this.messagge, this.userName, this.userImage, this.isMe,
-      {required this.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,21 +26,29 @@ class MessageBubble extends StatelessWidget {
           children: <Widget>[
             Container(
               decoration: BoxDecoration(
-                  color: isMe
-                      ? Colors.grey[300]
-                      : Theme.of(context).colorScheme.secondary,
-                  borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(12),
-                      topRight: const Radius.circular(12),
-                      bottomLeft: !isMe
-                          ? const Radius.circular(0)
-                          : const Radius.circular(12),
-                      bottomRight: isMe
-                          ? const Radius.circular(0)
-                          : const Radius.circular(12))),
+                color: isMe
+                    ? Colors.grey[300]
+                    : Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.only(
+                  topLeft: const Radius.circular(12),
+                  topRight: const Radius.circular(12),
+                  bottomLeft: !isMe
+                      ? const Radius.circular(0)
+                      : const Radius.circular(12),
+                  bottomRight: isMe
+                      ? const Radius.circular(0)
+                      : const Radius.circular(12),
+                ),
+              ),
               width: 140,
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
-              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+              padding: const EdgeInsets.symmetric(
+                vertical: 10,
+                horizontal: 16,
+              ),
+              margin: const EdgeInsets.symmetric(
+                vertical: 16,
+                horizontal: 8,
+              ),
               child: Column(
                 crossAxisAlignment:
                     isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
@@ -43,17 +56,19 @@ class MessageBubble extends StatelessWidget {
                   Text(
                     userName,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: isMe
-                            ? Colors.black
-                            : Theme.of(context).textTheme.headline6!.color),
+                      fontWeight: FontWeight.bold,
+                      color: isMe
+                          ? Colors.black
+                          : Theme.of(context).textTheme.headline6!.color,
+                    ),
                   ),
                   Text(
-                    messagge,
+                    message,
                     style: TextStyle(
-                        color: isMe
-                            ? Colors.black
-                            : Theme.of(context).textTheme.headline6!.color),
+                      color: isMe
+                          ? Colors.black
+                          : Theme.of(context).textTheme.headline6!.color,
+                    ),
                     textAlign: isMe ? TextAlign.end : TextAlign.start,
                   ),
                 ],
@@ -62,12 +77,15 @@ class MessageBubble extends StatelessWidget {
           ],
         ),
         Positioned(
-            top: 0,
-            left: isMe ? null : 140,
-            right: isMe ? 120 : null,
-            child: CircleAvatar(
-              backgroundImage: NetworkImage(userImage),
-            )),
+          top: 0,
+          left: isMe ? null : 120,
+          right: isMe ? 120 : null,
+          child: CircleAvatar(
+            backgroundImage: NetworkImage(
+              userImage,
+            ),
+          ),
+        ),
       ],
     );
   }
